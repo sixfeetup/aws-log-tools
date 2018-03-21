@@ -27,10 +27,18 @@ This only requires the name of the bucket that you have enabled for CloudFront l
 ### find_request_id.py
 
 ```console
-$ python find_request_id.py
+$ python find_request_id.py  -h
 usage: find_request_id.py [-h] [--profile PROFILE] --bucket BUCKET [--version]
                           request_id
-find_request_id.py: error: the following arguments are required: --bucket/-b, request_id
+
+positional arguments:
+  request_id            request-id to search the logs for
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --profile PROFILE, -p PROFILE
+  --bucket BUCKET, -b BUCKET
+  --version             show program's version number and exit
 ```
 
 Given a specific `request-id` and `bucket`, it will search them for the entry that matches and display a summary of that request as CloudFront saw it.
