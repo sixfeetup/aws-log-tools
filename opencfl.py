@@ -7,11 +7,13 @@ import arrow
 from clint.textui import colored, columns, puts, prompt
 from cloudfront_log_parser import parse
 
+#boto3.set_stream_logger('botocore', level='DEBUG')
+
 
 def opencfl_log(profile, bucket):
-    session = boto3.Session(profile_name=profile)
+    session = boto3.Session()
     s3_client = session.client('s3')
-    files = s3_client.list_objects_v2(Bucket=bucket, Prefix='cloudfront-log')
+    files = s3_client.list_objects_v2(Bucket=bucket, Prefix='prod-cf-logs')
     options = [k['Key'] for k in files['Contents']]
     try:
         filename = prompt.options('Pick log to view', [o.split('/')[1] for o in options])
