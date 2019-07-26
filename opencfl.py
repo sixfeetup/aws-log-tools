@@ -4,16 +4,34 @@ import gzip
 
 import boto3
 import arrow
+import click
 from clint.textui import colored, columns, puts, prompt
 from cloudfront_log_parser import parse
 
 #boto3.set_stream_logger('botocore', level='DEBUG')
 
 
-def opencfl_log(profile, bucket):
+@click.command()
+@click.option('--profile', '-p', default="default")
+@click.option('--bucket', '-b', required=True)
+@click.option('--distribution', required=True)
+@click.option('--prefix', default="prod-cf-logs")
+@click.option('--year', prompt=True)
+@click.option('--month', prompt=True)
+@click.option('--day', prompt=True)
+@click.version_option()
+def opencfl_log(profile, bucket, distribution, prefix, year, month, day):
     session = boto3.Session()
     s3_client = session.client('s3')
-    files = s3_client.list_objects_v2(Bucket=bucket, Prefix='prod-cf-logs')
+    # create a prefix based on distribution, year and month
+    prefix = prefix + '/' + distribution
+    if year:
+        prefix += '.' + str(year)
+    if month:
+        prefix += '-' + str(month)
+    if day:
+        prefix += '-' + str(day)
+    files = s3_client.list_objects_v2(Bucket=bucket, Prefix=prefix)
     options = [k['Key'] for k in files['Contents']]
     try:
         filename = prompt.options('Pick log to view', [o.split('/')[1] for o in options])
@@ -46,9 +64,4 @@ def opencfl_log(profile, bucket):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--profile', '-p', action='store', default="default")
-    parser.add_argument('--bucket', '-b', action='store', required=True)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
-    args = parser.parse_args()
-    opencfl_log(args.profile, args.bucket)
+    opencfl_log()
