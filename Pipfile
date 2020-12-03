@@ -7,12 +7,14 @@ verify_ssl = true
 pudb = "*"
 
 [packages]
-arrow = "==0.12.0"
-boto3 = "==1.5.14"
-botocore = "==1.8.28"
-clint = "==0.5.1"
-cloudfront-log-parser = "==0.3.0"
+arrow = "*"
+boto3 = "*"
+botocore = "*"
+clint = "*"
+cloudfront-log-parser = "*"
 click = "*"
+user-agents = "*"
+s3transfer = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

@@ -21,7 +21,7 @@ from cloudfront_log_parser import parse
 @click.option('--day', prompt=True)
 @click.version_option()
 def opencfl_log(profile, bucket, distribution, prefix, year, month, day):
-    session = boto3.Session()
+    session = boto3.Session(profile_name=profile)
     s3_client = session.client('s3')
     # create a prefix based on distribution, year and month
     prefix = prefix + '/' + distribution
